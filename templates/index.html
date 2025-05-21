@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laptop Price Predictor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('/static/sanit.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    .wrapper {
+      max-width: 700px;
+      background-color: rgba(0, 0, 0, 0.75);
+      margin: 60px auto;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.5em;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1em;
+    }
+
+    .btn {
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 1.1em;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 25px;
+    }
+
+    .btn:hover {
+      background-color: #0097a7;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    .success {
+      color: #4caf50;
+    }
+
+    .error {
+      color: #f44336;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Laptop Price Predictor</h1>
+
+    {% if prediction %}
+      <div class="message success">Predicted Price: {{ prediction }}</div>
+    {% elif error %}
+      <div class="message error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+      <label>Brand</label>
+      <select name="company">
+        {% for item in df['Company'].unique() %}
+          <option value="{{ item }}">{{ item }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Type</label>
+      <select name="type">
+        {% for item in df['TypeName'].unique() %}
+          <option value="{{ item }}">{{ item }}</option>
+        {% endfor %}
+      </select>
+
+      <label>RAM (GB)</label>
+      <select name="ram">
+        {% for val in [2, 4, 6, 8, 12, 16, 24, 32, 64] %}
+          <option value="{{ val }}">{{ val }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Weight (kg)</label>
+      <input type="number" name="weight" step="0.1" min="0.5" max="5.0" required>
+
+      <label>Touchscreen</label>
+      <select name="touchscreen">
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+      </select>
+
+      <label>IPS</label>
+      <select name="ips">
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+      </select>
+
+      <label>Screen Size (inches)</label>
+      <input type="number" name="screen_size" step="0.1" min="10.0" max="18.0" required>
+
+      <label>Resolution</label>
+      <select name="resolution">
+        {% for res in ['1920x1080', '1366x768', '1600x900', '3840x2160', '3200x1800', '2880x1800', '2560x1600', '2560x1440', '2304x1440'] %}
+          <option value="{{ res }}">{{ res }}</option>
+        {% endfor %}
+      </select>
+
+      <label>CPU</label>
+      <select name="cpu">
+        {% for item in df['Cpu brand'].unique() %}
+          <option value="{{ item }}">{{ item }}</option>
+        {% endfor %}
+      </select>
+
+      <label>HDD (GB)</label>
+      <select name="hdd">
+        {% for val in [0, 128, 256, 512, 1024, 2048] %}
+          <option value="{{ val }}">{{ val }}</option>
+        {% endfor %}
+      </select>
+
+      <label>SSD (GB)</label>
+      <select name="ssd">
+        {% for val in [0, 8, 128, 256, 512, 1024] %}
+          <option value="{{ val }}">{{ val }}</option>
+        {% endfor %}
+      </select>
+
+      <label>GPU</label>
+      <select name="gpu">
+        {% for item in df['Gpu brand'].unique() %}
+          <option value="{{ item }}">{{ item }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Operating System</label>
+      <select name="os">
+        {% for item in df['OS'].unique() %}
+          <option value="{{ item }}">{{ item }}</option>
+        {% endfor %}
+      </select>
+
+      <button class="btn" type="submit">Predict Price</button>
+    </form>
+  </div>
+</body>
+</html>
